@@ -1,0 +1,29 @@
+[versions]
+hoplite = "2.0.4"
+ktor = "1.6.8"
+kotest = "5.0.3"
+kotestKtor = "1.0.3"
+kotestGradle = "5.0.0.5"
+kotlin = "1.6.10"
+kotlinx = "1.5.2"
+logback = "1.2.11"
+
+[libraries]
+hoplite-core = { module = "com.sksamuel.hoplite:hoplite-core", version.ref = "hoplite" }
+hoplite-toml = { module = "com.sksamuel.hoplite:hoplite-toml", version.ref = "hoplite" }
+ktor-serverCore = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
+ktor-serverHostCommon = { module = "io.ktor:ktor-server-host-common", version.ref = "ktor" }
+ktor-serverSessions = { module = "io.ktor:ktor-server-sessions", version.ref = "ktor" }
+ktor-serverNetty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
+ktor-metricsMicrometer = { module = "io.ktor:ktor-metrics-micrometer", version.ref = "ktor" }
+ktor-serverTests = { module = "io.ktor:ktor-server-tests", version.ref = "ktor" }
+ktor-locations = { module = "io.ktor:ktor-locations", version.ref = "ktor" }
+ktor-webjars = { module = "io.ktor:ktor-webjars", version.ref = "ktor" }
+ktor-htmlBuilder = { module = "io.ktor:ktor-html-builder", version.ref = "ktor" }
+kotest-assertionsCore = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+kotest-extensionsAssertionsKtor = { module = "io.kotest.extensions:kotest-assertions-ktor", version.ref = "kotestKtor" }
+kotest-frameworkEngine = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
+kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
+kotest-runnerJUnit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+kotlinx-coroutinesCore = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx" }
+logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }

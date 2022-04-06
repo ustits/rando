@@ -1,3 +1,10 @@
+**/build
+/.idea
+/.gradle
+/.vscode
+/db
+/data.ms
+
 # Compiled class file
 *.class
 

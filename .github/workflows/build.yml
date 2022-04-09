@@ -1,0 +1,22 @@
+name: CI
+
+on:
+  push:
+    paths-ignore:
+      - '*.md'
+      - '*.txt'
+
+jobs:
+  build:
+    uses: ustits/rando/.github/workflows/build_workflow.yml@main
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    uses: ustits/rando/.github/workflows/deploy_workflow.yml@main
+    with:
+      version: ${{ github.run_id }}
+    secrets:
+      host: ${{ secrets.HOST }}
+      username: ${{ secrets.USERNAME }}
+      ssh_port: ${{ secrets.PORT }}
+      ssh_key: ${{ secrets.KEY }}

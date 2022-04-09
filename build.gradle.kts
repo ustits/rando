@@ -11,7 +11,6 @@ buildscript {
 }
 
 group = "rando"
-version = "1.0-SNAPSHOT"
 
 allprojects {
     apply(plugin = "kotlin")

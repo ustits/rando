@@ -1,0 +1,52 @@
+name: Deploy workflow
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
+        description: "Github action run id with built distribution"
+    secrets:
+      host:
+        required: true
+      username:
+        required: true
+      ssh_port:
+        required: true
+      ssh_key:
+        required: true
+
+jobs:
+  deploy:
+    name: "Deploy to server"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Load distribution
+        uses: actions/download-artifact@v2
+        with:
+          name: distribution
+
+      - name: Transfer files to server
+        uses: appleboy/scp-action@v0.1.2
+        with:
+          host: ${{ secrets.host }}
+          username: ${{ secrets.username }}
+          port: ${{ secrets.ssh_port }}
+          key: ${{ secrets.ssh_key }}
+          source: "rando.tar"
+          target: "rando_v${{ inputs.version }}"
+
+#      - name: Prepare and run
+#        uses: garygrossgarten/github-action-ssh@v0.6.3
+#        with:
+#          command: |
+#            cd rando_v${{ inputs.version }} &&
+#            tar xf rando.tar &&
+#            ln -sf ~/rando_v${{ inputs.version }}/rando/bin/rando /usr/local/bin/rando &&
+#            systemctl restart rando
+#          host: ${{ secrets.host }}
+#          username: ${{ secrets.username }}
+#          port: ${{ secrets.ssh_port }}
+#          privateKey: ${{ secrets.ssh_key }}

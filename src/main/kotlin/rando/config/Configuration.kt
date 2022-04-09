@@ -6,7 +6,8 @@ import com.sksamuel.hoplite.PropertySource
 import java.io.File
 
 data class Configuration(
-    val server: Server = Server()
+    val server: Server = Server(),
+    val app: App = App()
 )
 
 fun readConfiguration(): Configuration {

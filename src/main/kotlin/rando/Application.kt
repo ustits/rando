@@ -11,7 +11,8 @@ fun main() {
     val cfg = readConfiguration()
 
     embeddedServer(Netty, port = cfg.server.port, host = "0.0.0.0") {
-        configureRouting(cfg)
+        val appDeps = AppDeps(cfg)
+        configureRouting(appDeps)
         configureCallLogging()
         configureMetrics()
     }.start(wait = true)

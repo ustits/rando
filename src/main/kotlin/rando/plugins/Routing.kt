@@ -9,10 +9,12 @@ import io.ktor.locations.*
 import io.ktor.routing.*
 import io.ktor.webjars.*
 import kotlinx.html.p
-import rando.config.Configuration
+import rando.AppDeps
 import rando.html.Layout
+import rando.routes.index
+import rando.routes.randomTask
 
-fun Application.configureRouting(config: Configuration) {
+fun Application.configureRouting(appDeps: AppDeps) {
     install(Locations) {
     }
 
@@ -31,6 +33,13 @@ fun Application.configureRouting(config: Configuration) {
     }
 
     routing {
+        index(layout)
+        randomTask(
+            layout = layout,
+            hashIDSource = appDeps.hashIDSource(),
+            randomTask = appDeps.randomTask()
+        )
+
         static("assets") {
             resources("js")
             resources("css")

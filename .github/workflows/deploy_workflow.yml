@@ -38,15 +38,15 @@ jobs:
           source: "rando.tar"
           target: "rando_v${{ inputs.version }}"
 
-#      - name: Prepare and run
-#        uses: garygrossgarten/github-action-ssh@v0.6.3
-#        with:
-#          command: |
-#            cd rando_v${{ inputs.version }} &&
-#            tar xf rando.tar &&
-#            ln -sf ~/rando_v${{ inputs.version }}/rando/bin/rando /usr/local/bin/rando &&
-#            systemctl restart rando
-#          host: ${{ secrets.host }}
-#          username: ${{ secrets.username }}
-#          port: ${{ secrets.ssh_port }}
-#          privateKey: ${{ secrets.ssh_key }}
+      - name: Prepare and run
+        uses: garygrossgarten/github-action-ssh@v0.6.3
+        with:
+          command: |
+            cd rando_v${{ inputs.version }} &&
+            tar xf rando.tar &&
+            ln -sf ~/rando_v${{ inputs.version }}/rando/bin/rando /usr/local/bin/rando &&
+            systemctl restart rando
+          host: ${{ secrets.host }}
+          username: ${{ secrets.username }}
+          port: ${{ secrets.ssh_port }}
+          privateKey: ${{ secrets.ssh_key }}

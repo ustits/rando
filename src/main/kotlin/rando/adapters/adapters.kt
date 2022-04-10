@@ -2,13 +2,24 @@ package rando.adapters
 
 import org.hashids.Hashids
 import rando.domain.HashID
-import rando.domain.HashIDSource
+import rando.domain.HashIDs
 import rando.domain.ID
 
-fun hashidsHashIDSource(hashids: Hashids): HashIDSource = HashIDSource { str ->
-    hashids.longOrNull(str)?.let {
-        object : HashID {
-            override fun toID(): ID = it
+class HashidsHashIDs(private val hashids: Hashids) : HashIDs {
+    override fun fromString(str: String): HashID? {
+        return hashids.longOrNull(str)?.let {
+            object : HashID {
+                override fun toID(): ID = it
+                override fun print(): String = str
+            }
+        }
+    }
+
+    override fun fromID(id: ID): HashID {
+        val str = hashids.encode(id)
+        return object :HashID {
+            override fun toID(): ID = id
+            override fun print(): String = str
         }
     }
 }

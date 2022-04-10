@@ -4,11 +4,19 @@ typealias Task = String
 
 typealias ID = Long
 
-fun interface HashIDSource : (String) -> HashID?
+interface HashIDs {
+
+    fun fromString(str: String): HashID?
+
+    fun fromID(id: ID): HashID
+
+}
 
 interface HashID {
 
     fun toID(): ID
+
+    fun print(): String
 
 }
 

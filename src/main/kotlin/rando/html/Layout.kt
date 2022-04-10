@@ -43,7 +43,7 @@ class Layout : Template<HTML> {
                 nav {
                     ul {
                         li {
-                            a(href = "./", classes = "contrast logo") {
+                            a(href = "/", classes = "contrast logo") {
                                 strong {
                                     +"Rando"
                                 }

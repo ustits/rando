@@ -1,3 +1,2 @@
-Add ability to create todos
 Add ability to create task in todos
 Store todos

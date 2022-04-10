@@ -11,7 +11,7 @@ object TodosAPI {
 
         constructor(hashID: HashID) : this(hashID = hashID.print())
 
-        @Location("/task")
+        @Location("/tasks")
         class Task(val root: ByHashID)
 
     }

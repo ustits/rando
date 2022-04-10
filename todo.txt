@@ -1,5 +1,5 @@
 Show only active task in todo
-Add page with all tasks
+Add name field for todo
 Add page with completed tasks
 Add priority field
 Show task priority

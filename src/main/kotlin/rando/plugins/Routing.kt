@@ -14,7 +14,8 @@ import rando.html.Layout
 import rando.routes.createTask
 import rando.routes.createTodo
 import rando.routes.index
-import rando.routes.randomTask
+import rando.routes.listTasks
+import rando.routes.todo
 
 fun Application.configureRouting(appDeps: AppDeps) {
     install(Locations) {
@@ -36,7 +37,7 @@ fun Application.configureRouting(appDeps: AppDeps) {
 
     routing {
         index(layout)
-        randomTask(
+        todo(
             layout = layout,
             hashIDs = appDeps.hashIDs(),
             randomTask = appDeps.randomTask()
@@ -46,6 +47,11 @@ fun Application.configureRouting(appDeps: AppDeps) {
             todos = appDeps.todos()
         )
         createTask(
+            hashIDs = appDeps.hashIDs(),
+            todos = appDeps.todos()
+        )
+        listTasks(
+            layout = layout,
             hashIDs = appDeps.hashIDs(),
             todos = appDeps.todos()
         )

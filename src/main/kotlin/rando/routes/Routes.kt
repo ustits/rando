@@ -3,6 +3,8 @@ package rando.routes
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.html.*
+import io.ktor.locations.*
+import io.ktor.locations.post
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
@@ -19,10 +21,11 @@ import rando.domain.Todos
 import rando.html.Layout
 
 fun Route.index(layout: Layout) {
+    val newTodoURL = application.locations.href(TodosAPI)
     get("/") {
         call.respondHtmlTemplate(layout) {
             content {
-                form(method = FormMethod.post, action = "/todo") {
+                form(method = FormMethod.post, action = newTodoURL) {
                     input(type = InputType.submit) {
                         value = "Create todo"
                     }
@@ -33,17 +36,18 @@ fun Route.index(layout: Layout) {
 }
 
 fun Route.createTodo(hashIDs: HashIDs, todos: Todos) {
-    post("/todo") {
+    post<TodosAPI> {
         val id = todos.create()
         val hash = hashIDs.fromID(id)
-        call.respondRedirect("/todo/${hash.print()}")
+        val todoURL = call.locations.href(TodosAPI.ByHashID(hash))
+        call.respondRedirect(todoURL)
     }
 }
 
 fun Route.createTask(hashIDs: HashIDs, todos: Todos) {
-    post("/todo/{hashID}/task") {
-        val hashString = call.parameters["hashID"].orEmpty()
-        val hashID = hashIDs.fromString(hashString)
+    post<TodosAPI.ByHashID.Task> { loc ->
+        val hashID = hashIDs.fromString(loc.root.hashID)
+        val todoURL = locations.href(loc.root)
 
         if (hashID == null) {
             throw NotFoundException()
@@ -52,15 +56,15 @@ fun Route.createTask(hashIDs: HashIDs, todos: Todos) {
             val text = params.getOrFail("text")
             val id = hashID.toID()
             todos.forID(id).add(text)
-            call.respondRedirect("/todo/$hashString")
+            call.respondRedirect(todoURL)
         }
     }
 }
 
 fun Route.randomTask(layout: Layout, hashIDs: HashIDs, randomTask: RandomTask) {
-    get("/todo/{hashID}") {
-        val hashString = call.parameters["hashID"].orEmpty()
-        val hashID = hashIDs.fromString(hashString)
+    get<TodosAPI.ByHashID> { loc ->
+        val hashID = hashIDs.fromString(loc.hashID)
+        val taskURL = call.locations.href(TodosAPI.ByHashID.Task(loc))
 
         if (hashID == null) {
             throw NotFoundException()
@@ -78,7 +82,7 @@ fun Route.randomTask(layout: Layout, hashIDs: HashIDs, randomTask: RandomTask) {
                         }
                     }
 
-                    form(method = FormMethod.post, action = "/todo/$hashString/task") {
+                    form(method = FormMethod.post, action = taskURL) {
                         label {
                             +"Task"
                         }

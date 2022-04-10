@@ -1,2 +1,2 @@
-Add ability to create task in todos
 Store todos
+Show only active task in todo

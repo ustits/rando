@@ -11,6 +11,7 @@ import io.ktor.webjars.*
 import kotlinx.html.p
 import rando.AppDeps
 import rando.html.Layout
+import rando.routes.createTask
 import rando.routes.createTodo
 import rando.routes.index
 import rando.routes.randomTask
@@ -41,6 +42,10 @@ fun Application.configureRouting(appDeps: AppDeps) {
             randomTask = appDeps.randomTask()
         )
         createTodo(
+            hashIDs = appDeps.hashIDs(),
+            todos = appDeps.todos()
+        )
+        createTask(
             hashIDs = appDeps.hashIDs(),
             todos = appDeps.todos()
         )

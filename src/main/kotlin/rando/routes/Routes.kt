@@ -3,14 +3,16 @@ package rando.routes
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.html.*
+import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import io.ktor.util.*
 import kotlinx.html.FormMethod
 import kotlinx.html.InputType
-import kotlinx.html.button
 import kotlinx.html.form
 import kotlinx.html.h1
 import kotlinx.html.input
+import kotlinx.html.label
 import rando.domain.HashIDs
 import rando.domain.RandomTask
 import rando.domain.Todos
@@ -20,11 +22,9 @@ fun Route.index(layout: Layout) {
     get("/") {
         call.respondHtmlTemplate(layout) {
             content {
-                h1 {
-                    form(method = FormMethod.post, action = "/create") {
-                        input(type = InputType.submit) {
-                            value = "Create todo"
-                        }
+                form(method = FormMethod.post, action = "/todo") {
+                    input(type = InputType.submit) {
+                        value = "Create todo"
                     }
                 }
             }
@@ -33,10 +33,27 @@ fun Route.index(layout: Layout) {
 }
 
 fun Route.createTodo(hashIDs: HashIDs, todos: Todos) {
-    post("/create") {
+    post("/todo") {
         val id = todos.create()
         val hash = hashIDs.fromID(id)
         call.respondRedirect("/todo/${hash.print()}")
+    }
+}
+
+fun Route.createTask(hashIDs: HashIDs, todos: Todos) {
+    post("/todo/{hashID}/task") {
+        val hashString = call.parameters["hashID"].orEmpty()
+        val hashID = hashIDs.fromString(hashString)
+
+        if (hashID == null) {
+            throw NotFoundException()
+        } else {
+            val params = call.receiveParameters()
+            val text = params.getOrFail("text")
+            val id = hashID.toID()
+            todos.forID(id).add(text)
+            call.respondRedirect("/todo/$hashString")
+        }
     }
 }
 
@@ -49,19 +66,27 @@ fun Route.randomTask(layout: Layout, hashIDs: HashIDs, randomTask: RandomTask) {
             throw NotFoundException()
         } else {
             val task = randomTask(hashID)
-            if (task == null) {
-                call.respondHtmlTemplate(layout) {
-                    content {
-                        button {
-                            +"Create task"
-                        }
-                    }
-                }
-            } else {
-                call.respondHtmlTemplate(layout) {
-                    content {
+            call.respondHtmlTemplate(layout) {
+                content {
+                    if (task != null) {
                         h1 {
                             +task
+                        }
+                    } else {
+                        h1 {
+                            +"There are no tasks yet"
+                        }
+                    }
+
+                    form(method = FormMethod.post, action = "/todo/$hashString/task") {
+                        label {
+                            +"Task"
+                        }
+                        input(type = InputType.text, name = "text") {
+                            required = true
+                        }
+                        input(type = InputType.submit) {
+                            value = "Create task"
                         }
                     }
                 }

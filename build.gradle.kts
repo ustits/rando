@@ -48,6 +48,10 @@ dependencies {
     implementation(libs.ktor.htmlBuilder)
     implementation(libs.ktor.metricsMicrometer)
 
+    implementation("org.xerial:sqlite-jdbc:3.36.0.3")
+    implementation("org.flywaydb:flyway-core:8.5.5")
+    implementation("com.zaxxer:HikariCP:5.0.1")
+
     implementation("io.micrometer:micrometer-registry-prometheus:1.8.4")
 
     implementation("org.webjars.bowergithub.picocss:pico:1.5.0")

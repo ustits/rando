@@ -1,2 +1,10 @@
-Store todos
 Show only active task in todo
+Add page with all tasks
+Add page with completed tasks
+Add priority field
+Show task priority
+Choose random task by priority
+Add example on main page
+Add todo.txt highlighting (project and context)
+Create subtodo by project
+Create subtodo by context

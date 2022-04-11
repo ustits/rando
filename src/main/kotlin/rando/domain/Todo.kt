@@ -2,7 +2,7 @@ package rando.domain
 
 interface Todo {
 
-    fun taskList(): List<Task>
+    fun tasks(): Tasks
 
     fun add(task: Task)
 
@@ -10,8 +10,8 @@ interface Todo {
 
         private val mutableList: MutableList<Task> = mutableListOf()
 
-        override fun taskList(): List<Task> {
-            return mutableList
+        override fun tasks(): Tasks {
+            return Tasks.Stub(mutableList)
         }
 
         override fun add(task: Task) {

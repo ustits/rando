@@ -24,7 +24,7 @@ fun interface RandomTask : (HashID) -> Task? {
 
     class Impl(private val todos: Todos) : RandomTask {
         override fun invoke(p1: HashID): Task? {
-            return todos.forID(p1.toID()).taskList().randomOrNull()
+            return todos.forID(p1.toID()).tasks().asList().randomOrNull()
         }
     }
 

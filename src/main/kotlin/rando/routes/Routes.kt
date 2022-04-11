@@ -71,11 +71,11 @@ fun Route.listTasks(layout: Layout, hashIDs: HashIDs, todos: Todos) {
         if (hashID == null) {
             throw NotFoundException()
         } else {
-            val tasks = todos.forID(hashID.toID()).taskList()
+            val tasks = todos.forID(hashID.toID()).tasks()
             call.respondHtmlTemplate(layout) {
                 content {
                     ul {
-                        tasks.forEach { task ->
+                        tasks.asList().forEach { task ->
                             li {
                                 +task
                             }

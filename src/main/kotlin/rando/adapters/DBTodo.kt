@@ -12,7 +12,7 @@ class DBTodo(private val id: ID) : Todo {
 
     override fun add(task: Task) {
         transaction {
-            val statement = prepareStatement("INSERT INTO tasks (value, todo) VALUES (?, ?)")
+            val statement = prepareStatement("INSERT INTO tasks (text, todo) VALUES (?, ?)")
             statement.setString(1, task)
             statement.setLong(2, id)
             statement.execute()

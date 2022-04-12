@@ -11,8 +11,8 @@ class DBTasks(private val todoID: ID) : Tasks {
     override fun asList(): List<Task> =
         transaction {
             val statement = prepareStatement("""
-                SELECT tasks.value FROM todos, tasks 
-                WHERE todos.id = ? AND todos.id = tasks.todo
+                SELECT text FROM tasks 
+                WHERE tasks.todo = ?
             """.trimIndent())
             statement.setLong(1, todoID)
             val rs = statement.executeQuery()

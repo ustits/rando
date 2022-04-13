@@ -19,7 +19,8 @@ import kotlinx.html.label
 import kotlinx.html.li
 import kotlinx.html.ul
 import rando.domain.HashIDs
-import rando.domain.RandomTask
+import rando.domain.Task
+import rando.domain.TaskSource
 import rando.domain.Todos
 import rando.html.Layout
 
@@ -58,7 +59,7 @@ fun Route.createTask(hashIDs: HashIDs, todos: Todos) {
             val params = call.receiveParameters()
             val text = params.getOrFail("text")
             val id = hashID.toID()
-            todos.forID(id).add(text)
+            todos.forID(id).add(Task(text = text))
             call.respondRedirect(todoURL)
         }
     }
@@ -77,7 +78,7 @@ fun Route.listTasks(layout: Layout, hashIDs: HashIDs, todos: Todos) {
                     ul {
                         tasks.asList().forEach { task ->
                             li {
-                                +task
+                                +task.text
                             }
                         }
                     }
@@ -87,7 +88,7 @@ fun Route.listTasks(layout: Layout, hashIDs: HashIDs, todos: Todos) {
     }
 }
 
-fun Route.todo(layout: Layout, hashIDs: HashIDs, randomTask: RandomTask) {
+fun Route.todo(layout: Layout, hashIDs: HashIDs, taskSource: TaskSource) {
     get<TodosAPI.ByHashID> { loc ->
         val hashID = hashIDs.fromString(loc.hashID)
         val taskURL = call.locations.href(TodosAPI.ByHashID.Task(loc))
@@ -95,12 +96,12 @@ fun Route.todo(layout: Layout, hashIDs: HashIDs, randomTask: RandomTask) {
         if (hashID == null) {
             throw NotFoundException()
         } else {
-            val task = randomTask(hashID)
+            val task = taskSource(hashID)
             call.respondHtmlTemplate(layout) {
                 content {
                     if (task != null) {
                         h1 {
-                            +task
+                            +task.text
                         }
                     } else {
                         h1 {

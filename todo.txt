@@ -1,4 +1,3 @@
-Show only active task in todo
 Add name field for todo
 Add page with completed tasks
 Add priority field

@@ -1,7 +1,5 @@
 package rando.domain
 
-typealias Task = String
-
 typealias ID = Long
 
 interface HashIDs {
@@ -20,11 +18,24 @@ interface HashID {
 
 }
 
-fun interface RandomTask : (HashID) -> Task? {
+fun interface TaskSource : (HashID) -> Task? {
 
-    class Impl(private val todos: Todos) : RandomTask {
+    class Random(private val todos: Todos) : TaskSource {
         override fun invoke(p1: HashID): Task? {
             return todos.forID(p1.toID()).tasks().asList().randomOrNull()
+        }
+    }
+
+    class Active(private val todos: Todos) : TaskSource {
+        override fun invoke(p1: HashID): Task? {
+            val todo = todos.forID(p1.toID())
+            val activeTask = todo.activeTask()
+            return if (activeTask == null) {
+                todo.changeActiveTask { tasks -> tasks.asList().randomOrNull() }
+                todo.activeTask()
+            } else {
+                activeTask
+            }
         }
     }
 

@@ -40,7 +40,7 @@ fun Application.configureRouting(appDeps: AppDeps) {
         todo(
             layout = layout,
             hashIDs = appDeps.hashIDs(),
-            randomTask = appDeps.randomTask()
+            taskSource = appDeps.taskSource()
         )
         createTodo(
             hashIDs = appDeps.hashIDs(),

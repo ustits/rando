@@ -2,22 +2,6 @@ package rando.domain
 
 typealias ID = Long
 
-interface HashIDs {
-
-    fun fromString(str: String): HashID?
-
-    fun fromID(id: ID): HashID
-
-}
-
-interface HashID {
-
-    fun toID(): ID
-
-    fun print(): String
-
-}
-
 fun interface TaskSource : (HashID) -> Task? {
 
     class Random(private val todos: Todos) : TaskSource {

@@ -58,7 +58,7 @@ fun Route.createTask(hashIDs: HashIDs, todos: Todos) {
         } else {
             val params = call.receiveParameters()
             val text = params.getOrFail("text")
-            todos.forHashID(hashID).add(Task(text = text))
+            todos.forHashID(hashID).add(Task.New(text = text))
             call.respondRedirect(todoURL)
         }
     }
@@ -77,7 +77,7 @@ fun Route.listTasks(layout: Layout, hashIDs: HashIDs, todos: Todos) {
                     ul {
                         tasks.asList().forEach { task ->
                             li {
-                                +task.text
+                                +task.print()
                             }
                         }
                     }
@@ -100,7 +100,7 @@ fun Route.todo(layout: Layout, hashIDs: HashIDs, taskSource: TaskSource) {
                 content {
                     if (task != null) {
                         h1 {
-                            +task.text
+                            +task.print()
                         }
                     } else {
                         h1 {

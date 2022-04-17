@@ -22,7 +22,7 @@ class DBTodo(private val id: ID) : Todo {
             val task = if (rs.next()) {
                 val id  = rs.getLong(1)
                 val text  = rs.getString(2)
-                Task(id, text)
+                Task.Stub(id, text)
             } else {
                 null
             }
@@ -43,7 +43,7 @@ class DBTodo(private val id: ID) : Todo {
         transaction {
             val statement = prepareStatement("INSERT INTO todos_active_task (todo, task) VALUES (?, ?)")
             statement.setLong(1, id)
-            statement.setLong(2, task.id)
+            statement.setLong(2, task.id())
             statement.execute()
             statement.close()
         }
@@ -52,7 +52,7 @@ class DBTodo(private val id: ID) : Todo {
     override fun add(task: Task) {
         transaction {
             val statement = prepareStatement("INSERT INTO tasks (text, todo) VALUES (?, ?)")
-            statement.setString(1, task.text)
+            statement.setString(1, task.print())
             statement.setLong(2, id)
             statement.execute()
             statement.close()

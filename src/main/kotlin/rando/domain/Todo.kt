@@ -4,29 +4,29 @@ interface Todo {
 
     fun tasks(): Tasks
 
-    fun add(task: Task)
+    fun add(task: NewTask)
 
-    fun activeTask(): Task?
+    fun activeTask(): TodoTask?
 
-    fun changeActiveTask(strategy: (Tasks) -> Task?)
+    fun changeActiveTask(strategy: (Tasks) -> TodoTask?)
 
     class InMemory : Todo {
 
-        private val mutableList: MutableList<Task> = mutableListOf()
-        private var activeTask: Task? = null
+        private val mutableList: MutableList<TodoTask> = mutableListOf()
+        private var activeTask: TodoTask? = null
 
         override fun tasks(): Tasks {
             return Tasks.Stub(mutableList)
         }
 
-        override fun activeTask(): Task? = activeTask
+        override fun activeTask(): TodoTask? = activeTask
 
-        override fun changeActiveTask(strategy: (Tasks) -> Task?) {
+        override fun changeActiveTask(strategy: (Tasks) -> TodoTask?) {
             activeTask = strategy.invoke(tasks())
         }
 
-        override fun add(task: Task) {
-            mutableList.add(task)
+        override fun add(task: NewTask) {
+            mutableList.add(TodoTask.Stub(task))
         }
     }
 }

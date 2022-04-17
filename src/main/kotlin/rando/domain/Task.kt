@@ -1,19 +1,36 @@
 package rando.domain
 
-interface Task {
+import kotlin.random.Random
 
-    fun id(): ID
+interface Task {
 
     fun print(): String
 
-    class New(private val text: String) : Task {
-        override fun id(): ID = error("New task can't have id")
+    class Stub(private val text: String) : Task {
         override fun print(): String = text
     }
+}
 
-    class Stub(private val id: ID, private val text: String) : Task {
-        override fun id(): ID = id
+class NewTask(private val text: String) : Task {
+    override fun print(): String = text
+}
+
+interface TodoTask : Task {
+
+    fun id(): ID
+
+    fun complete()
+
+    class Stub(private val id: ID, private val text: String) : TodoTask {
+
+        constructor(task: Task) : this(id = Random.nextLong(), text = task.print())
+
         override fun print(): String = text
+
+        override fun id(): ID = id
+
+        override fun complete() {
+        }
     }
 
 }

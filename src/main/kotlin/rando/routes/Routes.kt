@@ -19,6 +19,7 @@ import kotlinx.html.label
 import kotlinx.html.li
 import kotlinx.html.ul
 import rando.domain.HashIDs
+import rando.domain.NewTask
 import rando.domain.Task
 import rando.domain.TaskSource
 import rando.domain.Todos
@@ -58,7 +59,7 @@ fun Route.createTask(hashIDs: HashIDs, todos: Todos) {
         } else {
             val params = call.receiveParameters()
             val text = params.getOrFail("text")
-            todos.forHashID(hashID).add(Task.New(text = text))
+            todos.forHashID(hashID).add(NewTask(text = text))
             call.respondRedirect(todoURL)
         }
     }

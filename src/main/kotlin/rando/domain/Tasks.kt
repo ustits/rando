@@ -4,8 +4,11 @@ interface Tasks {
 
     fun asList(): List<Task>
 
-    class Stub(private val list: List<Task>) : Tasks {
-        override fun asList(): List<Task> = list
+    fun todoTasks(): List<TodoTask>
+
+    class Stub(private val todoTasks: List<TodoTask>) : Tasks {
+        override fun asList(): List<Task> = todoTasks
+        override fun todoTasks(): List<TodoTask> = todoTasks
     }
 
 }

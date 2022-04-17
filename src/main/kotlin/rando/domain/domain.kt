@@ -15,7 +15,7 @@ fun interface TaskSource : (HashID) -> Task? {
             val todo = todos.forHashID(p1)
             val activeTask = todo.activeTask()
             return if (activeTask == null) {
-                todo.changeActiveTask { tasks -> tasks.asList().randomOrNull() }
+                todo.changeActiveTask { tasks -> tasks.todoTasks().randomOrNull() }
                 todo.activeTask()
             } else {
                 activeTask

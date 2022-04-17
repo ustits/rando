@@ -12,7 +12,7 @@ class DBTodoTask(private val id: ID, private val text: String) : TodoTask {
 
     override fun complete() {
         transaction {
-            val statement = prepareStatement("UPDATE tasks SET completed = true WHERE id = ?")
+            val statement = prepareStatement("DELETE FROM tasks WHERE id = ?")
             statement.setLong(1, id)
             statement.execute()
             statement.close()

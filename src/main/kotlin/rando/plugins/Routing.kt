@@ -15,7 +15,6 @@ import rando.routes.completeTask
 import rando.routes.createTask
 import rando.routes.createTodo
 import rando.routes.index
-import rando.routes.listTasks
 import rando.routes.todo
 
 fun Application.configureRouting(appDeps: AppDeps) {
@@ -48,11 +47,6 @@ fun Application.configureRouting(appDeps: AppDeps) {
             todos = appDeps.todos()
         )
         createTask(
-            hashIDs = appDeps.hashIDs(),
-            todos = appDeps.todos()
-        )
-        listTasks(
-            layout = layout,
             hashIDs = appDeps.hashIDs(),
             todos = appDeps.todos()
         )

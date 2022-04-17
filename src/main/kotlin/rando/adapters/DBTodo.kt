@@ -2,18 +2,14 @@ package rando.adapters
 
 import rando.db.toSequence
 import rando.db.transaction
-import rando.domain.ActiveTask
 import rando.domain.ID
 import rando.domain.NewTask
-import rando.domain.Tasks
 import rando.domain.Todo
 import rando.domain.TodoTask
 
-class DBTodo(private val todoID: ID, private val nextTaskStrategy: (Tasks) -> TodoTask?) : Todo {
+class DBTodo(private val todoID: ID, private val nextTaskStrategy: (List<TodoTask>) -> TodoTask?) : Todo {
 
-    override fun tasks(): Tasks = DBTasks(todoID)
-
-    override fun activeTask(): ActiveTask? {
+    override fun task(): TodoTask? {
         val task = getActiveTask()
         return if (task == null) {
             setActiveTask()
@@ -23,7 +19,7 @@ class DBTodo(private val todoID: ID, private val nextTaskStrategy: (Tasks) -> To
         }
     }
 
-    private fun getActiveTask(): ActiveTask? {
+    private fun getActiveTask(): TodoTask? {
         return transaction {
             val statement = prepareStatement("""
                 SELECT tasks.id, tasks.text FROM tasks, todos_active_task 
@@ -35,7 +31,7 @@ class DBTodo(private val todoID: ID, private val nextTaskStrategy: (Tasks) -> To
             val task = rs.toSequence {
                 val id  = rs.getLong(1)
                 val text  = rs.getString(2)
-                DBActiveTask(id = id, todoID = todoID, text = text)
+                DBTodoTask(id = id, text = text)
             }.firstOrNull()
 
             statement.close()
@@ -69,5 +65,9 @@ class DBTodo(private val todoID: ID, private val nextTaskStrategy: (Tasks) -> To
             statement.execute()
             statement.close()
         }
+    }
+
+    private fun tasks(): List<TodoTask> {
+        return DBTasks(todoID).todoTasks()
     }
 }

@@ -11,13 +11,10 @@ import io.ktor.routing.*
 import io.ktor.util.*
 import kotlinx.html.FormMethod
 import kotlinx.html.InputType
-import kotlinx.html.a
 import kotlinx.html.form
 import kotlinx.html.h1
 import kotlinx.html.input
 import kotlinx.html.label
-import kotlinx.html.li
-import kotlinx.html.ul
 import rando.domain.HashIDs
 import rando.domain.NewTask
 import rando.domain.Todos
@@ -63,29 +60,6 @@ fun Route.createTask(hashIDs: HashIDs, todos: Todos) {
     }
 }
 
-fun Route.listTasks(layout: Layout, hashIDs: HashIDs, todos: Todos) {
-    get<TodosAPI.ByHashID.Task> { loc ->
-        val hashID = hashIDs.fromString(loc.root.hashID)
-
-        if (hashID == null) {
-            throw NotFoundException()
-        } else {
-            val tasks = todos.forHashID(hashID).tasks()
-            call.respondHtmlTemplate(layout) {
-                content {
-                    ul {
-                        tasks.asList().forEach { task ->
-                            li {
-                                +task.print()
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
 fun Route.todo(layout: Layout, hashIDs: HashIDs, todos: Todos) {
     get<TodosAPI.ByHashID> { loc ->
         val hashID = hashIDs.fromString(loc.hashID)
@@ -96,7 +70,7 @@ fun Route.todo(layout: Layout, hashIDs: HashIDs, todos: Todos) {
             throw NotFoundException()
         } else {
             val todo = todos.forHashID(hashID)
-            val task = todo.activeTask()
+            val task = todo.task()
             call.respondHtmlTemplate(layout) {
                 content {
                     if (task != null) {
@@ -123,12 +97,6 @@ fun Route.todo(layout: Layout, hashIDs: HashIDs, todos: Todos) {
                         }
                         input(type = InputType.submit) {
                             value = "Create task"
-                        }
-                    }
-
-                    if (task != null) {
-                        a(href = taskURL) {
-                            +"All tasks"
                         }
                     }
                 }

@@ -2,11 +2,9 @@ package rando.domain
 
 interface Todo {
 
-    fun tasks(): Tasks
-
     fun add(task: NewTask)
 
-    fun activeTask(): ActiveTask?
+    fun task(): TodoTask?
 
     fun completeTask()
 

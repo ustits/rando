@@ -14,6 +14,9 @@ object TodosAPI {
         @Location("/tasks")
         class Task(val root: ByHashID)
 
+        @Location("/completeTask")
+        class CompleteTask(val root: ByHashID)
+
     }
 
 }

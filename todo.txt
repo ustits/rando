@@ -1,3 +1,4 @@
+Move nextDiceSource to a separate entity
 Add name field for todo
 Add page with completed tasks
 Add priority field

@@ -7,7 +7,7 @@ import rando.domain.Todos
 
 class DBTodos : Todos {
 
-    override fun forID(id: ID): Todo = DBTodo(id)
+    override fun forID(id: ID): Todo = DBTodo(id) { tasks -> tasks.todoTasks().randomOrNull() }
 
     override fun create(): ID =
         transaction {

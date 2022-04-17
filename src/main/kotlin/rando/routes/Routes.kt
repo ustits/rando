@@ -20,8 +20,6 @@ import kotlinx.html.li
 import kotlinx.html.ul
 import rando.domain.HashIDs
 import rando.domain.NewTask
-import rando.domain.Task
-import rando.domain.TaskSource
 import rando.domain.Todos
 import rando.html.Layout
 
@@ -88,20 +86,27 @@ fun Route.listTasks(layout: Layout, hashIDs: HashIDs, todos: Todos) {
     }
 }
 
-fun Route.todo(layout: Layout, hashIDs: HashIDs, taskSource: TaskSource) {
+fun Route.todo(layout: Layout, hashIDs: HashIDs, todos: Todos) {
     get<TodosAPI.ByHashID> { loc ->
         val hashID = hashIDs.fromString(loc.hashID)
         val taskURL = call.locations.href(TodosAPI.ByHashID.Task(loc))
+        val completeTaskURL = call.locations.href(TodosAPI.ByHashID.CompleteTask(loc))
 
         if (hashID == null) {
             throw NotFoundException()
         } else {
-            val task = taskSource(hashID)
+            val todo = todos.forHashID(hashID)
+            val task = todo.activeTask()
             call.respondHtmlTemplate(layout) {
                 content {
                     if (task != null) {
                         h1 {
                             +task.print()
+                        }
+                        form(method = FormMethod.post, action = completeTaskURL) {
+                            input(type = InputType.submit) {
+                                value = "Complete"
+                            }
                         }
                     } else {
                         h1 {
@@ -128,6 +133,21 @@ fun Route.todo(layout: Layout, hashIDs: HashIDs, taskSource: TaskSource) {
                     }
                 }
             }
+        }
+    }
+}
+
+fun Route.completeTask(hashIDs: HashIDs, todos: Todos) {
+    post<TodosAPI.ByHashID.CompleteTask> { loc ->
+        val hashID = hashIDs.fromString(loc.root.hashID)
+        val redirect = locations.href(loc.root)
+
+        if (hashID == null) {
+            throw NotFoundException()
+        } else {
+            val todo = todos.forHashID(hashID)
+            todo.completeTask()
+            call.respondRedirect(redirect)
         }
     }
 }

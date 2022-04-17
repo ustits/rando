@@ -1,7 +1,5 @@
 package rando.domain
 
-import kotlin.random.Random
-
 interface Task {
 
     fun print(): String
@@ -21,16 +19,6 @@ interface TodoTask : Task {
 
     fun complete()
 
-    class Stub(private val id: ID, private val text: String) : TodoTask {
-
-        constructor(task: Task) : this(id = Random.nextLong(), text = task.print())
-
-        override fun print(): String = text
-
-        override fun id(): ID = id
-
-        override fun complete() {
-        }
-    }
-
 }
+
+interface ActiveTask : TodoTask

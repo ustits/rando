@@ -13,9 +13,8 @@ class DBTodoRepository : TodoRepository {
         return if (exists(id)) {
             Todo.Impl(
                 id = id,
-                activeTaskRepository = DBActiveTaskRepository(),
                 todoTaskFactory = DBTodoTaskFactory(),
-                todoTaskRepository = DBTodoTaskRepository(),
+                taskRepository = DBTaskRepository(),
                 taskPickStrategy = TaskPickStrategy.Random()
             )
         } else {

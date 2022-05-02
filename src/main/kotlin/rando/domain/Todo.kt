@@ -12,8 +12,7 @@ interface Todo {
 
     class Impl(
         override val id: ID,
-        private val activeTaskRepository: ActiveTaskRepository,
-        private val todoTaskRepository: TodoTaskRepository,
+        private val taskRepository: TaskRepository,
         private val todoTaskFactory: TodoTaskFactory,
         private val taskPickStrategy: TaskPickStrategy
     ) : Todo {
@@ -36,7 +35,7 @@ interface Todo {
         }
 
         private fun getActiveTask(): ActiveTask? {
-            return activeTaskRepository.findByTodo(this)
+            return taskRepository.findActiveTasksByTodo(this).firstOrNull()
         }
 
         private fun assignNextTask(): ActiveTask? {
@@ -44,7 +43,7 @@ interface Todo {
         }
 
         private fun getNextTask(): TodoTask? {
-            val tasks = todoTaskRepository.findByTodo(this)
+            val tasks = taskRepository.findTodoTasksByTodo(this)
             return taskPickStrategy.invoke(tasks)
         }
 

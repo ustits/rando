@@ -20,7 +20,7 @@ interface TodoService {
         override fun findTodoByHashString(str: String): Todo? {
             val id = hashIDRepository.fromString(str)?.toID()
             return if (id != null) {
-                todoRepository.forID(id)
+                todoRepository.findByIDOrNull(id)
             } else {
                 null
             }

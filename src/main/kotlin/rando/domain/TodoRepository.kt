@@ -2,6 +2,6 @@ package rando.domain
 
 interface TodoRepository {
 
-    fun forID(id: ID): Todo
+    fun findByIDOrNull(id: ID): Todo?
 
 }

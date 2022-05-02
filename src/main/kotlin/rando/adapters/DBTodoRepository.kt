@@ -7,8 +7,8 @@ import rando.domain.TodoRepository
 
 class DBTodoRepository : TodoRepository {
 
-    override fun forID(id: ID): Todo = DBTodo(
-        todoID = id,
+    override fun forID(id: ID): Todo = Todo.Impl(
+        id = id,
         activeTaskRepository = DBActiveTaskRepository(),
         todoTaskFactory = DBTodoTaskFactory(),
         todoTaskRepository = DBTodoTaskRepository(),

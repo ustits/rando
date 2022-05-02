@@ -6,9 +6,8 @@ interface Task {
 
 }
 
-class NewTask(private val text: String) : Task {
-    override fun print(): String = text
-}
+@JvmInline
+value class NewTask(val text: String)
 
 interface TodoTask : Task {
 

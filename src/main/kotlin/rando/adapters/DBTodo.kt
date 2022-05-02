@@ -60,7 +60,7 @@ class DBTodo(private val todoID: ID, private val nextTaskStrategy: (List<TodoTas
     override fun add(task: NewTask) {
         transaction {
             val statement = prepareStatement("INSERT INTO tasks (text, todo) VALUES (?, ?)")
-            statement.setString(1, task.print())
+            statement.setString(1, task.text)
             statement.setLong(2, todoID)
             statement.execute()
             statement.close()

@@ -4,6 +4,7 @@ import rando.domain.ActiveTask
 import rando.domain.ActiveTaskRepository
 import rando.domain.ID
 import rando.domain.NewTask
+import rando.domain.TaskPickStrategy
 import rando.domain.Todo
 import rando.domain.TodoTask
 import rando.domain.TodoTaskFactory
@@ -14,7 +15,7 @@ class DBTodo(
     private val activeTaskRepository: ActiveTaskRepository,
     private val todoTaskRepository: TodoTaskRepository,
     private val todoTaskFactory: TodoTaskFactory,
-    private val nextTaskStrategy: (List<TodoTask>) -> TodoTask?
+    private val taskPickStrategy: TaskPickStrategy
 ) : Todo {
 
     override val id: ID
@@ -35,7 +36,7 @@ class DBTodo(
     }
 
     private fun setActiveTask() {
-        val task = nextTaskStrategy.invoke(tasks())
+        val task = taskPickStrategy.invoke(tasks())
         if (task != null) {
             activeTaskRepository.add(ActiveTask(task, todoID))
         }

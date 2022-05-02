@@ -3,9 +3,9 @@ package rando
 import org.hashids.Hashids
 import rando.adapters.DBTodoFactory
 import rando.adapters.DBTodoRepository
-import rando.adapters.HashidsHashIDRepository
+import rando.adapters.HashidsHashIDFactory
 import rando.config.Configuration
-import rando.domain.HashIDRepository
+import rando.domain.HashIDFactory
 import rando.domain.TodoService
 
 class AppDeps(private val config: Configuration) {
@@ -14,15 +14,15 @@ class AppDeps(private val config: Configuration) {
         return TodoService.Impl(
             todoFactory = DBTodoFactory(),
             todoRepository = DBTodoRepository(),
-            hashIDRepository = hashIDs()
+            hashIDFactory = hashIDs()
         )
     }
 
-    private fun hashIDs(): HashIDRepository {
+    private fun hashIDs(): HashIDFactory {
         val hashids = with(config.app.salt) {
             Hashids(text, length)
         }
-        return HashidsHashIDRepository(hashids)
+        return HashidsHashIDFactory(hashids)
     }
 
 }

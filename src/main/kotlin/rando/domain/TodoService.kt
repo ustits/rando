@@ -9,16 +9,16 @@ interface TodoService {
     class Impl(
         private val todoFactory: TodoFactory,
         private val todoRepository: TodoRepository,
-        private val hashIDRepository: HashIDRepository
+        private val hashIDFactory: HashIDFactory
     ) : TodoService {
 
         override fun createTodo(): HashID {
             val id = todoFactory.create()
-            return hashIDRepository.fromID(id)
+            return hashIDFactory.fromID(id)
         }
 
         override fun findTodoByHashString(str: String): Todo? {
-            val id = hashIDRepository.fromString(str)?.toID()
+            val id = hashIDFactory.fromStringOrNull(str)?.toID()
             return if (id != null) {
                 todoRepository.findByIDOrNull(id)
             } else {

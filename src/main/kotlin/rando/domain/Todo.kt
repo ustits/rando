@@ -2,9 +2,11 @@ package rando.domain
 
 interface Todo {
 
+    val id: ID
+
     fun add(task: NewTask)
 
-    fun task(): TodoTask?
+    fun task(): ActiveTask?
 
     fun completeTask()
 

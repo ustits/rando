@@ -6,6 +6,6 @@ import rando.domain.TodoRepository
 
 class DBTodoRepository : TodoRepository {
 
-    override fun forID(id: ID): Todo = DBTodo(id) { tasks -> tasks.randomOrNull() }
+    override fun forID(id: ID): Todo = DBTodo(id, DBActiveTaskRepository()) { tasks -> tasks.randomOrNull() }
 
 }

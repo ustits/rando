@@ -1,15 +1,23 @@
 package rando.adapters
 
-import rando.db.toSequence
 import rando.db.transaction
+import rando.domain.ActiveTask
+import rando.domain.ActiveTaskRepository
 import rando.domain.ID
 import rando.domain.NewTask
 import rando.domain.Todo
 import rando.domain.TodoTask
 
-class DBTodo(private val todoID: ID, private val nextTaskStrategy: (List<TodoTask>) -> TodoTask?) : Todo {
+class DBTodo(
+    private val todoID: ID,
+    private val activeTaskRepository: ActiveTaskRepository,
+    private val nextTaskStrategy: (List<TodoTask>) -> TodoTask?
+) : Todo {
 
-    override fun task(): TodoTask? {
+    override val id: ID
+        get() = todoID
+
+    override fun task(): ActiveTask? {
         val task = getActiveTask()
         return if (task == null) {
             setActiveTask()
@@ -19,24 +27,8 @@ class DBTodo(private val todoID: ID, private val nextTaskStrategy: (List<TodoTas
         }
     }
 
-    private fun getActiveTask(): TodoTask? {
-        return transaction {
-            val statement = prepareStatement("""
-                SELECT tasks.id, tasks.text FROM tasks, todos_active_task 
-                WHERE todos_active_task.todo = ? AND tasks.id = todos_active_task.task
-            """.trimIndent())
-            statement.setLong(1, todoID)
-
-            val rs = statement.executeQuery()
-            val task = rs.toSequence {
-                val id  = rs.getLong(1)
-                val text  = rs.getString(2)
-                TodoTask(id = id, text = text)
-            }.firstOrNull()
-
-            statement.close()
-            task
-        }
+    private fun getActiveTask(): ActiveTask? {
+        return activeTaskRepository.findByTodo(this)
     }
 
     private fun setActiveTask() {
@@ -57,10 +49,10 @@ class DBTodo(private val todoID: ID, private val nextTaskStrategy: (List<TodoTas
         setActiveTask()
     }
 
-    private fun complete(todoTask: TodoTask) {
+    private fun complete(task: ActiveTask) {
         transaction {
             val statement = prepareStatement("DELETE FROM tasks WHERE id = ?")
-            statement.setLong(1, todoTask.id)
+            statement.setLong(1, task.id)
             statement.execute()
             statement.close()
         }

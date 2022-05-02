@@ -1,6 +1,6 @@
 package rando.domain
 
-interface HashIDs {
+interface HashIDRepository {
 
     fun fromString(str: String): HashID?
 

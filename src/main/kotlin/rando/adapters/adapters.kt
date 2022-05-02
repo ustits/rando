@@ -2,10 +2,10 @@ package rando.adapters
 
 import org.hashids.Hashids
 import rando.domain.HashID
-import rando.domain.HashIDs
+import rando.domain.HashIDRepository
 import rando.domain.ID
 
-class HashidsHashIDs(private val hashids: Hashids) : HashIDs {
+class HashidsHashIDRepository(private val hashids: Hashids) : HashIDRepository {
     override fun fromString(str: String): HashID? {
         return hashids.longOrNull(str)?.let {
             object : HashID {

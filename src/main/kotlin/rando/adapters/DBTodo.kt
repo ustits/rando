@@ -7,10 +7,12 @@ import rando.domain.ID
 import rando.domain.NewTask
 import rando.domain.Todo
 import rando.domain.TodoTask
+import rando.domain.TodoTaskRepository
 
 class DBTodo(
     private val todoID: ID,
     private val activeTaskRepository: ActiveTaskRepository,
+    private val todoTaskRepository: TodoTaskRepository,
     private val nextTaskStrategy: (List<TodoTask>) -> TodoTask?
 ) : Todo {
 
@@ -58,6 +60,6 @@ class DBTodo(
     }
 
     private fun tasks(): List<TodoTask> {
-        return DBTasks(todoID).todoTasks()
+        return todoTaskRepository.findByTodo(this)
     }
 }

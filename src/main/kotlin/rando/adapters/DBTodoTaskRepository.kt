@@ -2,19 +2,19 @@ package rando.adapters
 
 import rando.db.toSequence
 import rando.db.transaction
-import rando.domain.ID
-import rando.domain.Tasks
+import rando.domain.Todo
+import rando.domain.TodoTaskRepository
 import rando.domain.TodoTask
 
-class DBTasks(private val todoID: ID) : Tasks {
+class DBTodoTaskRepository : TodoTaskRepository {
 
-    override fun todoTasks(): List<TodoTask> =
+    override fun findByTodo(todo: Todo): List<TodoTask> =
         transaction {
             val statement = prepareStatement("""
                 SELECT id, text FROM tasks
                 WHERE tasks.todo = ?
             """.trimIndent())
-            statement.setLong(1, todoID)
+            statement.setLong(1, todo.id)
             val rs = statement.executeQuery()
 
             val tasks = rs.toSequence {

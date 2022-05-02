@@ -39,19 +39,16 @@ fun Application.configureRouting(appDeps: AppDeps) {
         index(layout)
         todo(
             layout = layout,
-            hashIDs = appDeps.hashIDs(),
-            todoRepository = appDeps.todos()
+            todoService = appDeps.todoService()
         )
         createTodo(
             todoService = appDeps.todoService()
         )
         createTask(
-            hashIDs = appDeps.hashIDs(),
-            todoRepository = appDeps.todos()
+            todoService = appDeps.todoService()
         )
         completeTask(
-            hashIDs = appDeps.hashIDs(),
-            todoRepository = appDeps.todos()
+            todoService = appDeps.todoService()
         )
 
         static("assets") {

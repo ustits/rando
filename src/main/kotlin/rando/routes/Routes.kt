@@ -15,10 +15,8 @@ import kotlinx.html.form
 import kotlinx.html.h1
 import kotlinx.html.input
 import kotlinx.html.label
-import rando.domain.HashIDs
 import rando.domain.NewTask
 import rando.domain.TodoService
-import rando.domain.TodoRepository
 import rando.html.Layout
 
 fun Route.index(layout: Layout) {
@@ -44,32 +42,30 @@ fun Route.createTodo(todoService: TodoService) {
     }
 }
 
-fun Route.createTask(hashIDs: HashIDs, todoRepository: TodoRepository) {
+fun Route.createTask(todoService: TodoService) {
     post<TodosAPI.ByHashID.Task> { loc ->
-        val hashID = hashIDs.fromString(loc.root.hashID)
-        val todoURL = locations.href(loc.root)
-
-        if (hashID == null) {
+        val todo = todoService.findTodoByHashString(loc.root.hashID)
+        if (todo == null) {
             throw NotFoundException()
         } else {
             val params = call.receiveParameters()
             val text = params.getOrFail("text")
-            todoRepository.forHashID(hashID).add(NewTask(text = text))
+            todo.add(NewTask(text = text))
+            val todoURL = locations.href(loc.root)
             call.respondRedirect(todoURL)
         }
     }
 }
 
-fun Route.todo(layout: Layout, hashIDs: HashIDs, todoRepository: TodoRepository) {
+fun Route.todo(layout: Layout, todoService: TodoService) {
     get<TodosAPI.ByHashID> { loc ->
-        val hashID = hashIDs.fromString(loc.hashID)
+        val todo = todoService.findTodoByHashString(loc.hashID)
         val taskURL = call.locations.href(TodosAPI.ByHashID.Task(loc))
         val completeTaskURL = call.locations.href(TodosAPI.ByHashID.CompleteTask(loc))
 
-        if (hashID == null) {
+        if (todo == null) {
             throw NotFoundException()
         } else {
-            val todo = todoRepository.forHashID(hashID)
             val task = todo.task()
             call.respondHtmlTemplate(layout) {
                 content {
@@ -105,15 +101,14 @@ fun Route.todo(layout: Layout, hashIDs: HashIDs, todoRepository: TodoRepository)
     }
 }
 
-fun Route.completeTask(hashIDs: HashIDs, todoRepository: TodoRepository) {
+fun Route.completeTask(todoService: TodoService) {
     post<TodosAPI.ByHashID.CompleteTask> { loc ->
-        val hashID = hashIDs.fromString(loc.root.hashID)
+        val todo = todoService.findTodoByHashString(loc.root.hashID)
         val redirect = locations.href(loc.root)
 
-        if (hashID == null) {
+        if (todo == null) {
             throw NotFoundException()
         } else {
-            val todo = todoRepository.forHashID(hashID)
             todo.completeTask()
             call.respondRedirect(redirect)
         }

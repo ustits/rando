@@ -71,7 +71,7 @@ fun Route.todo(layout: Layout, todoService: TodoService) {
                 content {
                     if (task != null) {
                         h1 {
-                            +task.print()
+                            +task.text
                         }
                         form(method = FormMethod.post, action = completeTaskURL) {
                             input(type = InputType.submit) {

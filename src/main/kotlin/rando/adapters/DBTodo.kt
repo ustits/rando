@@ -31,7 +31,7 @@ class DBTodo(private val todoID: ID, private val nextTaskStrategy: (List<TodoTas
             val task = rs.toSequence {
                 val id  = rs.getLong(1)
                 val text  = rs.getString(2)
-                DBTodoTask(id = id, text = text)
+                TodoTask(id = id, text = text)
             }.firstOrNull()
 
             statement.close()
@@ -44,7 +44,7 @@ class DBTodo(private val todoID: ID, private val nextTaskStrategy: (List<TodoTas
         if (task != null) {
             transaction {
                 val statement = prepareStatement("INSERT INTO todos_active_task (task, todo) VALUES(?, ?)")
-                statement.setLong(1, task.id())
+                statement.setLong(1, task.id)
                 statement.setLong(2, todoID)
                 statement.execute()
                 statement.close()
@@ -53,8 +53,17 @@ class DBTodo(private val todoID: ID, private val nextTaskStrategy: (List<TodoTas
     }
 
     override fun completeTask() {
-        getActiveTask()?.complete()
+        getActiveTask()?.let{ complete(it) }
         setActiveTask()
+    }
+
+    private fun complete(todoTask: TodoTask) {
+        transaction {
+            val statement = prepareStatement("DELETE FROM tasks WHERE id = ?")
+            statement.setLong(1, todoTask.id)
+            statement.execute()
+            statement.close()
+        }
     }
 
     override fun add(task: NewTask) {

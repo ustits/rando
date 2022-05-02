@@ -20,7 +20,7 @@ class DBTasks(private val todoID: ID) : Tasks {
             val tasks = rs.toSequence {
                 val id = getLong(1)
                 val text = getString(2)
-                DBTodoTask(id, text)
+                TodoTask(id, text)
             }.toList()
             statement.close()
             tasks

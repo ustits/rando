@@ -1,18 +1,8 @@
 package rando.domain
 
-interface Task {
-
-    fun print(): String
-
-}
+sealed class Task
 
 @JvmInline
 value class NewTask(val text: String)
 
-interface TodoTask : Task {
-
-    fun id(): ID
-
-    fun complete()
-
-}
+data class TodoTask(val id: ID, val text: String) : Task()

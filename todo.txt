@@ -1,4 +1,5 @@
-Move nextDiceSource to a separate entity
+Bump ktor version
+Change todo name
 Add name field for todo
 Add priority field
 Choose random task by priority

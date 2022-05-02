@@ -1,14 +1,26 @@
 package rando.domain
 
-sealed class Task
+sealed interface Task {
+
+    val id: ID
+
+    val text: String
+
+}
 
 @JvmInline
 value class NewTask(val text: String)
 
-data class TodoTask(val id: ID, val text: String) : Task()
+interface TodoTask : Task {
 
-data class ActiveTask(val id: ID, val text: String, val todoID: ID) : Task() {
-
-    constructor(todoTask: TodoTask, todoID: ID) : this(todoTask.id, todoTask.text, todoID)
+    fun activate(): ActiveTask
 
 }
+
+interface ActiveTask: Task {
+
+    fun complete(): CompletedTask
+
+}
+
+interface CompletedTask : Task

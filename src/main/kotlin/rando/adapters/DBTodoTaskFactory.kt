@@ -15,7 +15,7 @@ class DBTodoTaskFactory : TodoTaskFactory {
             statement.setString(1, newTask.text)
             statement.setLong(2, todo.id)
             val task = statement.executeQuery().toSequence {
-                TodoTask(
+                DBTodoTask(
                     getLong(1),
                     getString(2)
                 )

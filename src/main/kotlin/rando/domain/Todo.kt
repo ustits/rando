@@ -25,7 +25,7 @@ interface Todo {
         override fun completeTask() {
             val task = getActiveTask()
             if (task != null) {
-                activeTaskRepository.remove(task)
+                task.complete()
             } else {
                 error("Can't completeTask. There is no active task for current todo")
             }
@@ -40,14 +40,7 @@ interface Todo {
         }
 
         private fun assignNextTask(): ActiveTask? {
-            val nextTask = getNextTask()
-            return if (nextTask != null) {
-                val activeTask = ActiveTask(nextTask, id)
-                activeTaskRepository.add(activeTask)
-                activeTask
-            } else {
-                null
-            }
+            return getNextTask()?.activate()
         }
 
         private fun getNextTask(): TodoTask? {

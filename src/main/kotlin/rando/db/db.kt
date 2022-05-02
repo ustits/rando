@@ -18,7 +18,6 @@ private fun migrateDatabase() {
     Flyway.configure()
         .dataSource(dataSource)
         .baselineOnMigrate(true)
-        .mixed(true)
         .load()
         .migrate()
 }

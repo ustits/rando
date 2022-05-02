@@ -19,38 +19,40 @@ interface Todo {
     ) : Todo {
 
         override fun task(): ActiveTask? {
+            return getActiveTask() ?: assignNextTask()
+        }
+
+        override fun completeTask() {
             val task = getActiveTask()
-            return if (task == null) {
-                setActiveTask()
-                getActiveTask()
+            if (task != null) {
+                activeTaskRepository.remove(task)
             } else {
-                task
+                error("Can't completeTask. There is no active task for current todo")
             }
+        }
+
+        override fun add(task: NewTask) {
+            todoTaskFactory.create(this, task)
         }
 
         private fun getActiveTask(): ActiveTask? {
             return activeTaskRepository.findByTodo(this)
         }
 
-        private fun setActiveTask() {
-            val tasks = todoTaskRepository.findByTodo(this)
-            val task = taskPickStrategy.invoke(tasks)
-            if (task != null) {
-                activeTaskRepository.add(ActiveTask(task, id))
+        private fun assignNextTask(): ActiveTask? {
+            val nextTask = getNextTask()
+            return if (nextTask != null) {
+                val activeTask = ActiveTask(nextTask, id)
+                activeTaskRepository.add(activeTask)
+                activeTask
+            } else {
+                null
             }
         }
 
-        override fun completeTask() {
-            getActiveTask()?.let{ complete(it) }
-            setActiveTask()
-        }
-
-        private fun complete(task: ActiveTask) {
-            activeTaskRepository.remove(task)
-        }
-
-        override fun add(task: NewTask) {
-            todoTaskFactory.create(this, task)
+        private fun getNextTask(): TodoTask? {
+            val tasks = todoTaskRepository.findByTodo(this)
+            return taskPickStrategy.invoke(tasks)
         }
 
     }

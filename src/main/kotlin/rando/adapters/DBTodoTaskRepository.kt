@@ -11,12 +11,12 @@ class DBTodoTaskRepository : TodoTaskRepository {
     override fun findByTodo(todo: Todo): List<TodoTask> =
         transaction {
             val statement = prepareStatement("""
-                SELECT id, text FROM tasks
-                WHERE tasks.todo = ?
+                SELECT id, text 
+                FROM tasks
+                WHERE todo = ? AND is_active = false AND completed_at IS NULL
             """.trimIndent())
             statement.setLong(1, todo.id)
             val rs = statement.executeQuery()
-
             val tasks = rs.toSequence {
                 val id = getLong(1)
                 val text = getString(2)

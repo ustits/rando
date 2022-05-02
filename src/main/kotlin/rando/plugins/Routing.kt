@@ -40,19 +40,18 @@ fun Application.configureRouting(appDeps: AppDeps) {
         todo(
             layout = layout,
             hashIDs = appDeps.hashIDs(),
-            todos = appDeps.todos()
+            todoRepository = appDeps.todos()
         )
         createTodo(
-            hashIDs = appDeps.hashIDs(),
-            todos = appDeps.todos()
+            todoService = appDeps.todoService()
         )
         createTask(
             hashIDs = appDeps.hashIDs(),
-            todos = appDeps.todos()
+            todoRepository = appDeps.todos()
         )
         completeTask(
             hashIDs = appDeps.hashIDs(),
-            todos = appDeps.todos()
+            todoRepository = appDeps.todos()
         )
 
         static("assets") {

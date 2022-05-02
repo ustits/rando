@@ -1,11 +1,13 @@
 package rando
 
 import org.hashids.Hashids
-import rando.adapters.DBTodos
+import rando.adapters.DBTodoFactory
+import rando.adapters.DBTodoRepository
 import rando.adapters.HashidsHashIDs
 import rando.config.Configuration
 import rando.domain.HashIDs
-import rando.domain.Todos
+import rando.domain.TodoService
+import rando.domain.TodoRepository
 
 class AppDeps(private val config: Configuration) {
 
@@ -16,6 +18,13 @@ class AppDeps(private val config: Configuration) {
         return HashidsHashIDs(hashids)
     }
 
-    fun todos(): Todos = DBTodos()
+    fun todos(): TodoRepository = DBTodoRepository()
+
+    fun todoService(): TodoService {
+        return TodoService.Impl(
+            todoFactory = DBTodoFactory(),
+            hashIDs = hashIDs()
+        )
+    }
 
 }

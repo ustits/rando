@@ -9,6 +9,7 @@ class DBTodoRepository : TodoRepository {
     override fun forID(id: ID): Todo = DBTodo(
         todoID = id,
         activeTaskRepository = DBActiveTaskRepository(),
+        todoTaskFactory = DBTodoTaskFactory(),
         todoTaskRepository = DBTodoTaskRepository()
     ) { tasks -> tasks.randomOrNull() }
 

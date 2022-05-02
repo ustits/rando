@@ -1,18 +1,19 @@
 package rando.adapters
 
-import rando.db.transaction
 import rando.domain.ActiveTask
 import rando.domain.ActiveTaskRepository
 import rando.domain.ID
 import rando.domain.NewTask
 import rando.domain.Todo
 import rando.domain.TodoTask
+import rando.domain.TodoTaskFactory
 import rando.domain.TodoTaskRepository
 
 class DBTodo(
     private val todoID: ID,
     private val activeTaskRepository: ActiveTaskRepository,
     private val todoTaskRepository: TodoTaskRepository,
+    private val todoTaskFactory: TodoTaskFactory,
     private val nextTaskStrategy: (List<TodoTask>) -> TodoTask?
 ) : Todo {
 
@@ -50,13 +51,7 @@ class DBTodo(
     }
 
     override fun add(task: NewTask) {
-        transaction {
-            val statement = prepareStatement("INSERT INTO tasks (text, todo) VALUES (?, ?)")
-            statement.setString(1, task.text)
-            statement.setLong(2, todoID)
-            statement.execute()
-            statement.close()
-        }
+        todoTaskFactory.create(this, task)
     }
 
     private fun tasks(): List<TodoTask> {

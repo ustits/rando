@@ -20,11 +20,30 @@ class DBActiveTaskRepository : ActiveTaskRepository {
             val task = rs.toSequence {
                 val id  = rs.getLong(1)
                 val text  = rs.getString(2)
-                ActiveTask(id = id, text = text)
+                ActiveTask(id = id, text = text, todoID = todo.id)
             }.firstOrNull()
 
             statement.close()
             task
+        }
+    }
+
+    override fun add(activeTask: ActiveTask) {
+        transaction {
+            val statement = prepareStatement("INSERT INTO todos_active_task (task, todo) VALUES(?, ?)")
+            statement.setLong(1, activeTask.id)
+            statement.setLong(2, activeTask.todoID)
+            statement.execute()
+            statement.close()
+        }
+    }
+
+    override fun remove(activeTask: ActiveTask) {
+        transaction {
+            val statement = prepareStatement("DELETE FROM tasks WHERE id = ?")
+            statement.setLong(1, activeTask.id)
+            statement.execute()
+            statement.close()
         }
     }
 }

@@ -34,13 +34,7 @@ class DBTodo(
     private fun setActiveTask() {
         val task = nextTaskStrategy.invoke(tasks())
         if (task != null) {
-            transaction {
-                val statement = prepareStatement("INSERT INTO todos_active_task (task, todo) VALUES(?, ?)")
-                statement.setLong(1, task.id)
-                statement.setLong(2, todoID)
-                statement.execute()
-                statement.close()
-            }
+            activeTaskRepository.add(ActiveTask(task, todoID))
         }
     }
 
@@ -50,12 +44,7 @@ class DBTodo(
     }
 
     private fun complete(task: ActiveTask) {
-        transaction {
-            val statement = prepareStatement("DELETE FROM tasks WHERE id = ?")
-            statement.setLong(1, task.id)
-            statement.execute()
-            statement.close()
-        }
+        activeTaskRepository.remove(task)
     }
 
     override fun add(task: NewTask) {

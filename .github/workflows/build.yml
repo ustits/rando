@@ -16,9 +16,11 @@ jobs:
   deploy:
     needs: build
     if: github.ref == 'refs/heads/main'
-    uses: ustits/rando/.github/workflows/deploy_workflow.yml@main
+    uses: ustits/actions/.github/workflows/jdk_deploy.yml@main
     with:
       version: ${{ github.run_id }}
+      tar_name: 'rando'
+      app_name: 'rando'
     secrets:
       host: ${{ secrets.HOST }}
       username: ${{ secrets.USERNAME }}

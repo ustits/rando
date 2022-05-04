@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    uses: ustits/actions/.github/workflows/jdk_build_workflow.yml@main
+    uses: ustits/actions/.github/workflows/jdk_build.yml@main
     with:
       jdk_version: '11'
       jdk_distribution: 'temurin'

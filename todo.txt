@@ -1,4 +1,6 @@
 Bump ktor version
+Add visual effects on new task
+Add completed tasks log
 Change todo name
 Add name field for todo
 Add priority field

@@ -28,6 +28,10 @@ class Todo(
         return taskRepository.findTodoTasksByTodo(this)
     }
 
+    fun completedTasks(): List<CompletedTask> {
+        return taskRepository.findCompletedTasksByTodo(this)
+    }
+
     private fun getActiveTask(): ActiveTask? {
         return taskRepository.findActiveTasksByTodo(this).firstOrNull()
     }

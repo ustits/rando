@@ -1,5 +1,7 @@
 package rando.domain
 
+import java.time.LocalDate
+
 sealed interface Task {
 
     val id: ID
@@ -23,4 +25,8 @@ interface ActiveTask: Task {
 
 }
 
-interface CompletedTask : Task
+interface CompletedTask : Task {
+
+    val completedAt: LocalDate
+
+}

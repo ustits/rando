@@ -6,4 +6,6 @@ interface TaskRepository {
 
     fun findActiveTasksByTodo(todo: Todo): List<ActiveTask>
 
+    fun findCompletedTasksByTodo(todo: Todo): List<CompletedTask>
+
 }

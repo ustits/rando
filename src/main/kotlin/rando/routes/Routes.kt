@@ -12,6 +12,7 @@ import io.ktor.util.*
 import kotlinx.html.FormMethod
 import kotlinx.html.InputType
 import kotlinx.html.details
+import kotlinx.html.em
 import kotlinx.html.form
 import kotlinx.html.h1
 import kotlinx.html.input
@@ -72,6 +73,7 @@ fun Route.todo(layout: Layout, todoService: TodoService) {
         } else {
             val activeTask = todo.activeTask()
             val todoTasks = todo.todoTasks()
+            val completedTasks = todo.completedTasks()
             call.respondHtmlTemplate(layout) {
                 content {
                     if (activeTask != null) {
@@ -96,6 +98,25 @@ fun Route.todo(layout: Layout, todoService: TodoService) {
                     } else {
                         h1 {
                             +"There are no tasks yet"
+                        }
+                    }
+                    if (completedTasks.isNotEmpty()) {
+                        details {
+                            summary { +"Done" }
+                            completedTasks.groupBy { it.completedAt }.forEach { (time, tasks) ->
+                                ul {
+                                    li {
+                                        em { +time.toString() }
+                                        ul {
+                                            tasks.forEach { task ->
+                                                li {
+                                                    +task.text
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
 

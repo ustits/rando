@@ -11,7 +11,7 @@ import rando.domain.TodoService
 class AppDeps(private val config: Configuration) {
 
     fun todoService(): TodoService {
-        return TodoService.Impl(
+        return TodoService(
             todoFactory = DBTodoFactory(),
             todoRepository = DBTodoRepository(),
             hashIDFactory = hashIDs()

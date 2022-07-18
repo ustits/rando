@@ -11,7 +11,7 @@ class DBTodoRepository : TodoRepository {
 
     override fun findByIDOrNull(id: ID): Todo? {
         return if (exists(id)) {
-            Todo.Impl(
+            Todo(
                 id = id,
                 todoTaskFactory = DBTodoTaskFactory(),
                 taskRepository = DBTaskRepository(),

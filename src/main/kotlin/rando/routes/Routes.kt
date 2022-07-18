@@ -11,10 +11,14 @@ import io.ktor.routing.*
 import io.ktor.util.*
 import kotlinx.html.FormMethod
 import kotlinx.html.InputType
+import kotlinx.html.details
 import kotlinx.html.form
 import kotlinx.html.h1
 import kotlinx.html.input
 import kotlinx.html.label
+import kotlinx.html.li
+import kotlinx.html.summary
+import kotlinx.html.ul
 import rando.domain.NewTask
 import rando.domain.TodoService
 import rando.html.Layout
@@ -66,16 +70,27 @@ fun Route.todo(layout: Layout, todoService: TodoService) {
         if (todo == null) {
             throw NotFoundException()
         } else {
-            val task = todo.task()
+            val activeTask = todo.activeTask()
+            val todoTasks = todo.todoTasks()
             call.respondHtmlTemplate(layout) {
                 content {
-                    if (task != null) {
+                    if (activeTask != null) {
                         h1 {
-                            +task.text
+                            +activeTask.text
                         }
                         form(method = FormMethod.post, action = completeTaskURL) {
                             input(type = InputType.submit) {
                                 value = "Complete"
+                            }
+                        }
+                        if (todoTasks.isNotEmpty()) {
+                            details {
+                                summary { +"To be done" }
+                                ul {
+                                    todoTasks.forEach {
+                                        li { +it.text }
+                                    }
+                                }
                             }
                         }
                     } else {

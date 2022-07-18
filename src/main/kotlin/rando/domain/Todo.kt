@@ -11,7 +11,7 @@ class Todo(
         todoTaskFactory.create(this, task)
     }
 
-    fun task(): ActiveTask? {
+    fun activeTask(): ActiveTask? {
         return getActiveTask() ?: assignNextTask()
     }
 
@@ -22,6 +22,10 @@ class Todo(
         } else {
             error("Can't completeTask. There is no active task for current todo")
         }
+    }
+
+    fun todoTasks(): List<TodoTask> {
+        return taskRepository.findTodoTasksByTodo(this)
     }
 
     private fun getActiveTask(): ActiveTask? {
